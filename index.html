@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GM 車両管理システム</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>GM 車両管理システム</h1>
+    </header>
+
+    <main>
+        <!-- トップページ -->
+        <section id="topPage" class="page">
+            <div class="customer-vehicle-section">
+                <h2>お客様車両管理</h2>
+                <div class="button-group">
+                    <button class="btn-menu" id="btnCheckIn">入庫</button>
+                    <button class="btn-menu" id="btnCheckOut">出庫</button>
+                    <button class="btn-menu" id="btnCheckInOutHistory">入出庫履歴</button>
+                    <button class="btn-menu" id="btnStoredVehicleList">預かり車両一覧</button>
+                </div>
+            </div>
+
+            <div class="loaner-car-section">
+                <h2>代車管理</h2>
+                <div class="button-group">
+                    <button class="btn-menu" id="btnLoanOut">貸出</button>
+                    <button class="btn-menu" id="btnReturn">返却</button>
+                    <button class="btn-menu" id="btnLoanHistory">貸出履歴</button>
+                    <button class="btn-menu" id="btnLoanerCarList">代車一覧</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 入庫画面 -->
+        <section id="checkInPage" class="page" style="display: none;">
+            <h2>入庫</h2>
+            <form id="checkInForm">
+                <div class="form-group">
+                    <label for="checkInDate">入庫日:</label>
+                    <input type="date" id="checkInDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkInTime">時刻:</label>
+                    <input type="time" id="checkInTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerName">お客様名:</label>
+                    <input type="text" id="customerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="vehicleModel">預かり車両:</label>
+                    <input type="text" id="vehicleModel" required>
+                </div>
+                <div class="form-group">
+                    <label for="vehicleNumber">ナンバー:</label>
+                    <input type="text" id="vehicleNumber" required>
+                </div>
+                <div class="form-group">
+                    <label for="remarks">備考欄:</label>
+                    <textarea id="remarks" rows="4"></textarea>
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="btn-add">登録する</button>
+                    <button type="button" class="btn-cancel" id="btnCancelCheckIn">キャンセル</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 出庫画面（預かり車両一覧） -->
+        <section id="checkOutPage" class="page" style="display: none;">
+            <h2>出庫</h2>
+            <button class="btn-back" id="btnBackFromCheckOut">戻る</button>
+            <div id="checkOutList" class="vehicle-list"></div>
+        </section>
+
+        <!-- 出庫時刻入力画面 -->
+        <section id="checkOutInputPage" class="page" style="display: none;">
+            <h2>出庫</h2>
+            <form id="checkOutForm">
+                <input type="hidden" id="checkOutVehicleId">
+                <div class="form-group">
+                    <label>出庫する車両:</label>
+                    <p id="checkOutVehicleInfo" style="font-weight: bold; color: #2c3e50;"></p>
+                </div>
+                <div class="form-group">
+                    <label for="checkOutTime">出庫時刻:</label>
+                    <input type="time" id="checkOutTime" required>
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="btn-add">出庫する</button>
+                    <button type="button" class="btn-cancel" id="btnCancelCheckOut">キャンセル</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 預かり車両一覧 -->
+        <section id="storedVehicleListPage" class="page" style="display: none;">
+            <h2>預かり車両一覧</h2>
+            <button class="btn-back" id="btnBackFromStoredList">戻る</button>
+            <div id="storedVehicleList" class="vehicle-list"></div>
+        </section>
+
+        <!-- 入出庫履歴 -->
+        <section id="checkInOutHistoryPage" class="page" style="display: none;">
+            <h2>入出庫履歴</h2>
+            <button class="btn-back" id="btnBackFromHistory">戻る</button>
+
+            <!-- 検索フォーム -->
+            <div class="search-form">
+                <h3>検索</h3>
+                <form id="checkInOutSearchForm" class="search-inputs">
+                    <div class="form-group-inline">
+                        <label for="checkInOutKeyword">フリーワード:</label>
+                        <input type="text" id="checkInOutKeyword" placeholder="お客様名、車種、ナンバー等">
+                    </div>
+                    <div class="form-group-inline">
+                        <label for="checkInOutStartDate">開始日:</label>
+                        <input type="date" id="checkInOutStartDate">
+                    </div>
+                    <div class="form-group-inline">
+                        <label for="checkInOutEndDate">終了日:</label>
+                        <input type="date" id="checkInOutEndDate">
+                    </div>
+                    <button type="submit" class="btn-search">検索</button>
+                    <button type="button" class="btn-reset" id="btnResetCheckInOutSearch">リセット</button>
+                </form>
+            </div>
+
+            <div id="historyList" class="history-list"></div>
+        </section>
+
+        <!-- 代車一覧 -->
+        <section id="loanerCarListPage" class="page" style="display: none;">
+            <h2>代車一覧</h2>
+            <button class="btn-back" id="btnBackFromLoanerCarList">戻る</button>
+
+            <!-- 絞り込みボタン -->
+            <div class="filter-buttons">
+                <button class="btn-filter active" data-filter="all">代車一覧</button>
+                <button class="btn-filter" data-filter="available">貸出可</button>
+                <button class="btn-filter" data-filter="in-use">貸出中</button>
+                <button class="btn-filter" data-filter="needs-cleaning">清掃必要</button>
+                <button class="btn-filter" data-filter="unavailable">貸出不可</button>
+            </div>
+
+            <!-- 代車を追加するボタン -->
+            <button class="btn-add-car" id="btnAddLoanerCar">代車を追加する</button>
+
+            <!-- 代車一覧 -->
+            <div id="loanerCarList" class="car-list"></div>
+        </section>
+
+        <!-- 代車追加画面 -->
+        <section id="addLoanerCarPage" class="page" style="display: none;">
+            <h2>代車を追加</h2>
+            <form id="addLoanerCarForm">
+                <div class="form-group">
+                    <label for="newCarModel">車種:</label>
+                    <input type="text" id="newCarModel" required>
+                </div>
+                <div class="form-group">
+                    <label for="newCarNumber">ナンバー:</label>
+                    <input type="text" id="newCarNumber" required>
+                </div>
+                <div class="form-group">
+                    <label for="newInspectionDate">車検日:</label>
+                    <input type="date" id="newInspectionDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="newCarStatus">ステータス:</label>
+                    <select id="newCarStatus" required>
+                        <option value="available">貸出可</option>
+                        <option value="in-use">貸出中</option>
+                        <option value="needs-cleaning">清掃必要</option>
+                        <option value="unavailable">貸出不可</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="btn-add">追加する</button>
+                    <button type="button" class="btn-cancel" id="btnCancelAddCar">キャンセル</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 貸出車選択画面 -->
+        <section id="loanOutSelectPage" class="page" style="display: none;">
+            <h2>貸出 - 車両を選択</h2>
+            <button class="btn-back" id="btnBackFromLoanOutSelect">戻る</button>
+            <div id="availableCarsList" class="car-list"></div>
+        </section>
+
+        <!-- 貸出入力画面 -->
+        <section id="loanOutInputPage" class="page" style="display: none;">
+            <h2>貸出</h2>
+            <form id="loanOutForm">
+                <input type="hidden" id="selectedCarId">
+                <div class="form-group">
+                    <label>選択した代車:</label>
+                    <p id="selectedCarInfo" style="font-weight: bold; color: #2c3e50;"></p>
+                </div>
+                <div class="form-group">
+                    <label for="loanOutDate">貸出日:</label>
+                    <input type="date" id="loanOutDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="loanOutTime">貸出時間:</label>
+                    <select id="loanOutTime" required>
+                        <!-- JavaScriptで時間オプションを生成 -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="loanCustomerName">お客様名:</label>
+                    <input type="text" id="loanCustomerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerVehicleModel">預かり車両:</label>
+                    <input type="text" id="customerVehicleModel">
+                </div>
+                <div class="form-group">
+                    <label for="customerVehicleNumber">預かり車両ナンバー:</label>
+                    <input type="text" id="customerVehicleNumber">
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="btn-add">登録する</button>
+                    <button type="button" class="btn-cancel" id="btnCancelLoanOut">キャンセル</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 返却選択画面 -->
+        <section id="returnSelectPage" class="page" style="display: none;">
+            <h2>返却 - 車両を選択</h2>
+            <button class="btn-back" id="btnBackFromReturnSelect">戻る</button>
+            <div id="inUseCars" class="car-list"></div>
+        </section>
+
+        <!-- 返却入力画面 -->
+        <section id="returnInputPage" class="page" style="display: none;">
+            <h2>返却</h2>
+            <form id="returnForm">
+                <input type="hidden" id="returnCarId">
+                <div class="form-group">
+                    <label>返却する代車:</label>
+                    <p id="returnCarInfo" style="font-weight: bold; color: #2c3e50;"></p>
+                </div>
+                <div class="form-group">
+                    <label for="returnDate">返却日:</label>
+                    <input type="date" id="returnDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="returnTime">返却時刻:</label>
+                    <input type="time" id="returnTime" required>
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="btn-add">返却する</button>
+                    <button type="button" class="btn-cancel" id="btnCancelReturn">キャンセル</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 貸出履歴 -->
+        <section id="loanHistoryPage" class="page" style="display: none;">
+            <h2>貸出履歴</h2>
+            <button class="btn-back" id="btnBackFromLoanHistory">戻る</button>
+
+            <!-- 検索フォーム -->
+            <div class="search-form">
+                <h3>検索</h3>
+                <form id="loanHistorySearchForm" class="search-inputs">
+                    <div class="form-group-inline">
+                        <label for="loanHistoryKeyword">フリーワード:</label>
+                        <input type="text" id="loanHistoryKeyword" placeholder="お客様名、代車名、ナンバー等">
+                    </div>
+                    <div class="form-group-inline">
+                        <label for="loanHistoryStartDate">開始日:</label>
+                        <input type="date" id="loanHistoryStartDate">
+                    </div>
+                    <div class="form-group-inline">
+                        <label for="loanHistoryEndDate">終了日:</label>
+                        <input type="date" id="loanHistoryEndDate">
+                    </div>
+                    <button type="submit" class="btn-search">検索</button>
+                    <button type="button" class="btn-reset" id="btnResetLoanHistorySearch">リセット</button>
+                </form>
+            </div>
+
+            <div id="loanHistoryList" class="history-list"></div>
+        </section>
+    </main>
+
+    <!-- 編集モーダル -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>代車編集</h2>
+            <form id="editCarForm">
+                <input type="hidden" id="editCarId">
+                <div class="form-group">
+                    <label for="editCarModel">車種名:</label>
+                    <input type="text" id="editCarModel" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCarNumber">ナンバー:</label>
+                    <input type="text" id="editCarNumber" required>
+                </div>
+                <div class="form-group">
+                    <label for="editInspectionDate">車検日:</label>
+                    <input type="date" id="editInspectionDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="editStatus">ステータス:</label>
+                    <select id="editStatus">
+                        <option value="available">貸出可</option>
+                        <option value="in-use">貸出中</option>
+                        <option value="needs-cleaning">清掃必要</option>
+                        <option value="unavailable">貸出不可</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-save">保存</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 GM 車両管理システム</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

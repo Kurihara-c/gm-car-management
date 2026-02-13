@@ -1,0 +1,546 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #2c3e50;
+    color: #ffffff;
+    text-align: center;
+    padding: 2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+section {
+    background-color: #ffffff;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+}
+
+/* フォームスタイル */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+/* ボタンスタイル */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+/* ボタングループ */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* メニューボタン */
+.btn-menu {
+    background-color: #3498db;
+    color: white;
+    flex: 1;
+    min-width: 150px;
+    padding: 15px 20px;
+    font-size: 1.1rem;
+}
+
+.btn-menu:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* トップページの各ボタンの色 */
+/* 入庫・貸出ボタン - 緑 */
+#btnCheckIn,
+#btnLoanOut {
+    background-color: #4CAF50;
+}
+
+#btnCheckIn:hover,
+#btnLoanOut:hover {
+    background-color: #45a049;
+}
+
+/* 出庫・返却ボタン - 青 */
+#btnCheckOut,
+#btnReturn {
+    background-color: #2196F3;
+}
+
+#btnCheckOut:hover,
+#btnReturn:hover {
+    background-color: #0b7dda;
+}
+
+/* 入出庫履歴・貸出履歴ボタン - グレー */
+#btnCheckInOutHistory,
+#btnLoanHistory {
+    background-color: #9E9E9E;
+}
+
+#btnCheckInOutHistory:hover,
+#btnLoanHistory:hover {
+    background-color: #757575;
+}
+
+/* 預かり車両一覧・代車一覧ボタン - オレンジ */
+#btnStoredVehicleList,
+#btnLoanerCarList {
+    background-color: #FF9800;
+}
+
+#btnStoredVehicleList:hover,
+#btnLoanerCarList:hover {
+    background-color: #e68900;
+}
+
+.btn-add,
+.btn-save {
+    background-color: #27ae60;
+    color: white;
+}
+
+.btn-add:hover,
+.btn-save:hover {
+    background-color: #229954;
+}
+
+.btn-cancel {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #7f8c8d;
+}
+
+.btn-back {
+    background-color: #95a5a6;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.btn-back:hover {
+    background-color: #7f8c8d;
+}
+
+.btn-edit {
+    background-color: #3498db;
+    color: white;
+    margin-right: 0.5rem;
+}
+
+.btn-edit:hover {
+    background-color: #2980b9;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
+}
+
+/* 代車リスト */
+.car-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.car-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    transition: transform 0.2s;
+}
+
+.car-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.selectable-car {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.selectable-car:hover {
+    background-color: #e8f4f8;
+    border-color: #3498db;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(52, 152, 219, 0.2);
+}
+
+.car-info {
+    margin-bottom: 1rem;
+}
+
+.car-info h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.car-info p {
+    margin: 0.3rem 0;
+    color: #555;
+}
+
+.car-status {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+.status-available {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-in-use {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-needs-cleaning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-unavailable {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.warning-message {
+    color: #e74c3c;
+    font-weight: bold;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background-color: #fadbd8;
+    border-radius: 4px;
+    border-left: 4px solid #e74c3c;
+}
+
+.inspection-warning {
+    color: #e74c3c;
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+.car-actions {
+    margin-top: 1rem;
+}
+
+/* モーダル */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+}
+
+/* お客様車両管理セクション */
+.customer-vehicle-section,
+.loaner-car-section {
+    margin-bottom: 2rem;
+}
+
+/* 車両リスト */
+.vehicle-list,
+.history-list {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.vehicle-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    transition: all 0.2s;
+}
+
+.vehicle-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.vehicle-info h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.vehicle-info p {
+    margin: 0.3rem 0;
+    color: #555;
+}
+
+/* 履歴アイテム */
+.history-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+}
+
+.history-info h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.history-info p {
+    margin: 0.3rem 0;
+    color: #555;
+}
+
+/* ページコンテナ */
+.page {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 検索フォーム */
+.search-form {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e0e0e0;
+}
+
+.search-form h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.search-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.form-group-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.form-group-inline label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group-inline input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    min-width: 200px;
+}
+
+.form-group-inline input[type="text"] {
+    min-width: 250px;
+}
+
+.btn-search {
+    background-color: #3498db;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.btn-search:hover {
+    background-color: #2980b9;
+}
+
+.btn-reset {
+    background-color: #95a5a6;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.btn-reset:hover {
+    background-color: #7f8c8d;
+}
+
+/* フィルターボタン */
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.btn-filter {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+}
+
+.btn-filter:hover {
+    background-color: #bdc3c7;
+}
+
+.btn-filter.active {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-filter.active:hover {
+    background-color: #2980b9;
+}
+
+/* 代車追加ボタン */
+.btn-add-car {
+    background-color: #27ae60;
+    color: white;
+    padding: 12px 24px;
+    margin: 1rem 0;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-add-car:hover {
+    background-color: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    background-color: #fff;
+    margin-top: 2rem;
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    main {
+        padding: 0 0.5rem;
+    }
+
+    section {
+        padding: 1rem;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+}
